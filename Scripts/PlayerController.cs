@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float walkSpeed = 10.0f;
     [SerializeField] float gravity = -10.0f;
 
-    [SerializeField] bool lockCursor = true;
-
     float cameraPitch = 0.0f;
     float velocityY = 0.0f;
     CharacterController controller;
@@ -19,11 +17,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        if(lockCursor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
 
