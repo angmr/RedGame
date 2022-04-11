@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] Transform playerCamera;
     [SerializeField] float mouseSensitivity = 3.0f;
-    [SerializeField] float walkSpeed = 10.0f;
+    public float moveSpeed = 4.0f;
+    public float runSpeed = 40.0f;
+    public float walkSpeed = 4.0f;
     [SerializeField] float gravity = -10.0f;
 
     float cameraPitch = 0.0f;
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         UpdateMouseLook();
+        IsRunning();
         UpdateMovement();
     }
 
@@ -53,8 +56,18 @@ public class PlayerController : MonoBehaviour
 
         velocityY += gravity * Time.deltaTime;
 
-        Vector3 velocity = (transform.forward * inputDirection.y + transform.right * inputDirection.x) * walkSpeed + Vector3.up * velocityY;
+
+
+        Vector3 velocity = (transform.forward * inputDirection.y + transform.right * inputDirection.x) * moveSpeed + Vector3.up * velocityY;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    float IsRunning() // Sprint
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && controller.isGrounded) {moveSpeed = runSpeed;} // Hold Shift to Sprint
+        if (Input.GetKeyUp(KeyCode.LeftShift) && controller.isGrounded) {moveSpeed = walkSpeed;} // Release Shift to Walk
+
+        return walkSpeed;
     }
 }
