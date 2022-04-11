@@ -63,11 +63,15 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+    
     float IsRunning() // Sprint
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && controller.isGrounded) {moveSpeed = runSpeed;} // Hold Shift to Sprint
-        if (Input.GetKeyUp(KeyCode.LeftShift) && controller.isGrounded) {moveSpeed = walkSpeed;} // Release Shift to Walk
+        if (Input.GetKeyDown(KeyCode.LeftShift)) {moveSpeed = runSpeed;} // Hold Shift to Sprint
+        if (Input.GetKeyUp(KeyCode.LeftShift)) {moveSpeed = walkSpeed;} // Release Shift to Walk
 
         return walkSpeed;
     }
+
+
+    
 }
