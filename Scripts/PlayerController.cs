@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Transform playerCamera;
-    [SerializeField] float mouseSensitivity = 3.0f;
+    public Transform playerCamera;
+
+    public float mouseSensitivity = 3.0f;
     public float moveSpeed = 4.0f;
     public float runSpeed = 40.0f;
     public float walkSpeed = 4.0f;
-    [SerializeField] float gravity = -10.0f;
+    public float gravity = -10.0f;
 
     float cameraPitch = 0.0f;
     float velocityY = 0.0f;
