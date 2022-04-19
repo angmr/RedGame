@@ -7,20 +7,16 @@ public class PlayerController : MonoBehaviour
     public Transform playerCamera;
 
     public float mouseSensitivity = 3.0f;
-    public float moveSpeed = 4.0f;
-    public float runSpeed = 40.0f;
-    public float walkSpeed = 4.0f;
-    public float gravity = -10.0f;
+    private float cameraPitch = 0.0f;
+    private float maxPitchAngle = 90.0f;
 
-    float cameraPitch = 0.0f;
-    float velocityY = 0.0f;
-    CharacterController controller;
+    public CharacterController controller;
+    public float walkSpeed = 3.0f;
+    public float runSpeed = 16.0f;
 
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -28,22 +24,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        UpdateMouseLook();
-        IsRunning();
+        MouseLook();
         UpdateMovement();
     }
 
 
-    void UpdateMouseLook()
+    void MouseLook()
     {
-        Vector2 mouseDela = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
-        cameraPitch -= mouseDela.y * mouseSensitivity;
-        cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
+        cameraPitch -= mouseDelta.y * mouseSensitivity;
+        cameraPitch = Mathf.Clamp(cameraPitch, -maxPitchAngle, maxPitchAngle);
 
         playerCamera.localEulerAngles = Vector3.right * cameraPitch;
-
-        transform.Rotate(Vector3.up * mouseDela.x * mouseSensitivity);
+        transform.Rotate(Vector3.up * mouseDelta.x * mouseSensitivity);
+        
     }
 
 
@@ -52,27 +47,9 @@ public class PlayerController : MonoBehaviour
         Vector2 inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         inputDirection.Normalize();
 
-        if(controller.isGrounded)
-            velocityY = 0.0f;
-
-        velocityY += gravity * Time.deltaTime;
-
-
-
-        Vector3 velocity = (transform.forward * inputDirection.y + transform.right * inputDirection.x) * moveSpeed + Vector3.up * velocityY;
+        Vector3 velocity = (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * (transform.forward * inputDirection.y + transform.right * inputDirection.x);
 
         controller.Move(velocity * Time.deltaTime);
     }
-
-    
-    float IsRunning() // Sprint
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift)) {moveSpeed = runSpeed;} // Hold Shift to Sprint
-        if (Input.GetKeyUp(KeyCode.LeftShift)) {moveSpeed = walkSpeed;} // Release Shift to Walk
-
-        return walkSpeed;
-    }
-
-
     
 }
